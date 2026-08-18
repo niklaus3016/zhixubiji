@@ -1,0 +1,6 @@
+{
+  "name": "知序笔记",
+  "description": "纯前端离线读书笔记应用，专注读书摘录、要点总结与感悟记录",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

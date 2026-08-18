@@ -1,0 +1,8 @@
+{
+  "appId": "com.zhixubiji.app",
+  "appName": "知序笔记",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}
