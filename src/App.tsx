@@ -396,18 +396,6 @@ export default function App() {
           )}
         </main>
 
-        {/* Bottom Navigation */}
-        <BottomNav
-          activeTab={activeTab}
-          onTabChange={(tab) => {
-            if (tab === 'note_edit') {
-              setNoteToEdit(null);
-            }
-            setActiveTab(tab);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-        />
-
         {/* Modals */}
         <BookModal
           isOpen={isBookModalOpen}
@@ -454,6 +442,19 @@ export default function App() {
           onCancel={() => setDeleteNoteModal({ isOpen: false, note: null })}
         />
       </div>
+
+      {/* Bottom Navigation — placed outside the backdrop-blur container so
+          `position: fixed` is relative to the viewport, not the blurred wrapper */}
+      <BottomNav
+        activeTab={activeTab}
+        onTabChange={(tab) => {
+          if (tab === 'note_edit') {
+            setNoteToEdit(null);
+          }
+          setActiveTab(tab);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
     </div>
   );
 }
