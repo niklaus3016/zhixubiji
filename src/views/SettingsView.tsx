@@ -15,7 +15,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onClearAllData,
 }) => {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
-  const [clearInput, setClearInput] = useState('');
   const [showPolicyModal, setShowPolicyModal] = useState<'agreement' | 'privacy' | null>(null);
 
   const [importConfirmModal, setImportConfirmModal] = useState<{
@@ -86,13 +85,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   };
 
   const handleConfirmClearAll = async () => {
-    if (clearInput.trim() !== '确认清空') {
-      alert('请输入 "确认清空" 四字确认');
-      return;
-    }
     await onClearAllData();
     setShowClearConfirm(false);
-    setClearInput('');
     showToast('所有本地数据已安全重置');
   };
 
@@ -195,33 +189,39 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
         {/* Clear Confirm Box */}
         {showClearConfirm && (
-          <div className="p-3.5 bg-red-950/80 border border-red-500/40 rounded-xl space-y-2.5 animate-in fade-in duration-150">
-            <p className="text-xs font-bold text-red-200">
-              ⚠️ 请在输入框中键入 "确认清空" 以继续：
-            </p>
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                value={clearInput}
-                onChange={(e) => setClearInput(e.target.value)}
-                placeholder={'键入 "确认清空"'}
-                className="px-3 py-1.5 bg-slate-900 border border-red-500/40 rounded-xl text-xs focus:outline-none flex-1 font-semibold text-white placeholder-slate-500"
-              />
-              <button
-                onClick={handleConfirmClearAll}
-                className="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold"
-              >
-                彻底清空
-              </button>
-              <button
-                onClick={() => {
-                  setShowClearConfirm(false);
-                  setClearInput('');
-                }}
-                className="px-3 py-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700 rounded-xl text-xs font-medium"
-              >
-                取消
-              </button>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md animate-in fade-in duration-150">
+            <div className="bg-slate-900 text-slate-100 rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-red-500/30 space-y-4">
+              <div className="flex items-center gap-2 text-white font-bold text-base font-serif">
+                <AlertTriangle className="w-5 h-5 text-red-400" />
+                <h3>确认清空全部数据？</h3>
+              </div>
+
+              <div className="text-xs text-slate-300 space-y-2 bg-red-950/40 p-3 rounded-xl border border-red-500/20">
+                <p className="text-red-300 font-semibold">⚠️ 此操作不可逆！</p>
+                <ul className="list-disc list-inside space-y-1 text-slate-300">
+                  <li>所有本地书籍记录将被永久删除</li>
+                  <li>所有读书笔记内容将被永久删除</li>
+                  <li>所有自定义标签将被永久删除</li>
+                </ul>
+                <p className="text-red-400 text-[11px] pt-1 border-t border-red-500/20 font-medium">
+                  建议操作前先导出 JSON 备份，以防误删。
+                </p>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-1">
+                <button
+                  onClick={() => setShowClearConfirm(false)}
+                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-medium"
+                >
+                  取消
+                </button>
+                <button
+                  onClick={handleConfirmClearAll}
+                  className="px-5 py-2 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-bold shadow-md shadow-red-600/20"
+                >
+                  确认清空
+                </button>
+              </div>
             </div>
           </div>
         )}
