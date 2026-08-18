@@ -53,3 +53,6 @@ pnpm-lock.yaml
 
 # Source icon (reference only, not needed in repo)
 zxbj512.png
+
+# Reference files from other app (not part of this project)
+qitaapp/
