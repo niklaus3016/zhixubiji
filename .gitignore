@@ -56,3 +56,9 @@ zxbj512.png
 
 # Reference files from other app (not part of this project)
 qitaapp/
+
+# Android signing (MUST NOT commit keystores)
+android/keystore.properties
+android/app/*.keystore
+android/app/*.jks
+android/my-release-key.keystore

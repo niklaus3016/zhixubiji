@@ -56,8 +56,8 @@ android {
         release {
             storeFile file('../my-release-key.keystore')
             storePassword System.getenv('KEYSTORE_PASSWORD') ?: '123456'
-            keyAlias 'zhixubiji'
-            keyPassword System.getenv('KEYSTORE_PASSWORD') ?: '123456'
+            keyAlias System.getenv('KEY_ALIAS') ?: 'zhixubiji'
+            keyPassword System.getenv('KEY_PASSWORD') ?: System.getenv('KEYSTORE_PASSWORD') ?: '123456'
             v1SigningEnabled true
             v2SigningEnabled true
             storeType 'JKS'

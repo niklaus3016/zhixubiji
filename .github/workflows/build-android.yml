@@ -97,6 +97,8 @@ jobs:
     - name: Build Android Release APK
       env:
         KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
         cd android
         echo "=== Building Release APK ==="
@@ -109,16 +111,43 @@ jobs:
         cd android
         ./gradlew assembleDebug
     
+    - name: Locate debug APK
+      id: debug-apk
+      run: |
+        set -e
+        APK=$(ls -1 android/app/build/outputs/apk/debug/*.apk | head -1)
+        if [ -z "$APK" ]; then
+          echo "Error: debug APK not found"
+          exit 1
+        fi
+        echo "Found debug APK: $APK"
+        echo "apk=$APK" >> "$GITHUB_OUTPUT"
+
+    - name: Locate release APK
+      id: release-apk
+      run: |
+        set -e
+        APK=$(ls -1 android/app/build/outputs/apk/release/*.apk 2>/dev/null | head -1)
+        if [ -z "$APK" ]; then
+          echo "Error: release APK not found"
+          ls -la android/app/build/outputs/apk/release/ || true
+          exit 1
+        fi
+        echo "Found release APK: $APK"
+        echo "apk=$APK" >> "$GITHUB_OUTPUT"
+
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: android/app/build/outputs/apk/debug/app-debug.apk
+        path: ${{ steps.debug-apk.outputs.apk }}
         retention-days: 30
-    
+        if-no-files-found: error
+
     - name: Upload Release APK
       uses: actions/upload-artifact@v4
       with:
         name: app-release
-        path: android/app/build/outputs/apk/release/app-release.apk
+        path: ${{ steps.release-apk.outputs.apk }}
         retention-days: 30
+        if-no-files-found: error
